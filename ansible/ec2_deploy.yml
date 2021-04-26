@@ -20,7 +20,8 @@
       register: ec2
 
     - name: Add instance host to group
-      add_host: hostname={{item.public_dns_name}} groupname=launched
+      wait_for: host={{ item.public_dns_name }} delay=30 timeout=300 state=started
+      add_host: hostname={{ item.public_dns_name }} groupname=launched
       with_items: '{{ec2.instances}}'
 
     - name: Wait for SSH connection
